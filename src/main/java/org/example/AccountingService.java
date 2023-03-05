@@ -1,5 +1,6 @@
 package org.example;
 
+
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,12 +11,12 @@ import reactor.netty.resources.ConnectionProvider;
 import java.time.Duration;
 
 @Service
-public class DeliveryService {
+public class AccountingService {
 
-    private static final String DELIVERY_SERVICE_URL = "http://localhost:3000/delivery/";
+    private static final String ACCOUNT_SERVICE_URL = "http://localhost:3000/bill/";
     private final WebClient webClient;
 
-    public DeliveryService() {
+    public AccountingService() {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
                 .maxConnections(2000)
@@ -31,11 +32,11 @@ public class DeliveryService {
                 .build();
     }
 
-    public Mono<Delivery> fetchDelivery(long id) {
+    public Mono<BillInfo> fetchBillInfoForOrder(long orderId) {
         return this.webClient
                 .get()
-                .uri(DELIVERY_SERVICE_URL + id)
+                .uri(ACCOUNT_SERVICE_URL + orderId)
                 .retrieve()
-                .bodyToMono(Delivery.class);
+                .bodyToMono(BillInfo.class);
     }
 }

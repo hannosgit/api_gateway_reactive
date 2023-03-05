@@ -1,24 +1,29 @@
 package org.example;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/order")
 public class OrderController {
 
-    private final DeliveryService deliveryService;
+    private final OrderService orderService;
 
-    public OrderController(DeliveryService deliveryService) {
-        this.deliveryService = deliveryService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
-    @GetMapping("/{id}")
-    public Mono<Delivery> getOrderById(@PathVariable long id) {
-        return deliveryService.fetchDelivery(id);
+//    @ExceptionHandler(FetchException.class)
+//    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+//    public ErrorResponse fetchException(FetchException fetchException) {
+//        System.err.println(fetchException);
+//        return new ErrorResponse(fetchException.getMessage());
+//    }
+
+    @GetMapping("/{orderId}")
+    public Mono<OrderDetails> getOrderById(@PathVariable long orderId) {
+        return orderService.fetchOrderDetails(orderId);
     }
 
 }
