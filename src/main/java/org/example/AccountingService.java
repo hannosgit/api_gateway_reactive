@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
+import reactor.util.retry.Retry;
 
 import java.time.Duration;
 
@@ -38,6 +39,7 @@ public class AccountingService {
                 .uri(ACCOUNT_SERVICE_URL + orderId)
                 .header("Authorization", "Authorization: Bearer " + token)
                 .retrieve()
-                .bodyToMono(BillInfo.class);
+                .bodyToMono(BillInfo.class)
+                .retryWhen(Retry.fixedDelay(2, Duration.ofMillis(10)));
     }
 }

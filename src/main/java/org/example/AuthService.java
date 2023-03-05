@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
+import reactor.util.retry.Retry;
 
 import java.time.Duration;
 
@@ -39,7 +40,8 @@ public class AuthService {
                 .bodyValue(new AuthenticateRequest(username, password))
                 .retrieve()
                 .bodyToMono(AuthenticateResponse.class)
-                .map(authenticateResponse -> authenticateResponse.token);
+                .map(authenticateResponse -> authenticateResponse.token)
+                .retryWhen(Retry.fixedDelay(2, Duration.ofMillis(10)));
     }
 
     private record AuthenticateRequest(String username, String password) {
