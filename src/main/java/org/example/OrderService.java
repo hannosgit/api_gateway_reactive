@@ -6,21 +6,28 @@ import reactor.core.publisher.Mono;
 @Service
 public class OrderService {
 
+    private final AuthService authService;
+
     private final AccountingService accountingService;
 
     private final DeliveryService deliveryService;
 
-    public OrderService(AccountingService accountingService, DeliveryService deliveryService) {
+    public OrderService(AuthService authService, AccountingService accountingService, DeliveryService deliveryService) {
+        this.authService = authService;
         this.accountingService = accountingService;
         this.deliveryService = deliveryService;
     }
 
 
-    public Mono<OrderDetails> fetchOrderDetails(long orderId) {
-        final Mono<Delivery> deliveryMono = deliveryService.fetchDelivery(orderId);
-        final Mono<BillInfo> billInfoMono = accountingService.fetchBillInfoForOrder(orderId);
+    public Mono<OrderDetails> fetchOrderDetails(long orderId, String username, String password) {
+        final Mono<String> tokenMono = authService.fetchToken(username, password);
 
-        return Mono.zip(deliveryMono, billInfoMono, (delivery, billInfo) -> new OrderDetails(orderId, delivery, billInfo));
+        return tokenMono.flatMap(token -> {
+            final Mono<Delivery> deliveryMono = deliveryService.fetchDelivery(orderId, token);
+            final Mono<BillInfo> billInfoMono = accountingService.fetchBillInfoForOrder(orderId, token);
+
+            return Mono.zip(deliveryMono, billInfoMono, (delivery, billInfo) -> new OrderDetails(orderId, delivery, billInfo));
+        });
     }
 
 }

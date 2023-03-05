@@ -1,6 +1,5 @@
 package org.example;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -22,8 +21,13 @@ public class OrderController {
 //    }
 
     @GetMapping("/{orderId}")
-    public Mono<OrderDetails> getOrderById(@PathVariable long orderId) {
-        return orderService.fetchOrderDetails(orderId);
+    public Mono<OrderDetails> getOrderById(@PathVariable long orderId, @RequestHeader("Authorization") String authorization) {
+        final String basic = authorization.substring(authorization.indexOf("Basic "));
+        final String[] split = basic.split(":");
+        final String username = split[0];
+        final String password = split[1];
+
+        return orderService.fetchOrderDetails(orderId, username, password);
     }
 
 }

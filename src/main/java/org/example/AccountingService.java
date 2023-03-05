@@ -32,10 +32,11 @@ public class AccountingService {
                 .build();
     }
 
-    public Mono<BillInfo> fetchBillInfoForOrder(long orderId) {
+    public Mono<BillInfo> fetchBillInfoForOrder(long orderId, String token) {
         return this.webClient
                 .get()
                 .uri(ACCOUNT_SERVICE_URL + orderId)
+                .header("Authorization", "Authorization: Bearer " + token)
                 .retrieve()
                 .bodyToMono(BillInfo.class);
     }

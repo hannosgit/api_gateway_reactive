@@ -1,5 +1,6 @@
 package org.example;
 
+
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,12 +11,12 @@ import reactor.netty.resources.ConnectionProvider;
 import java.time.Duration;
 
 @Service
-public class DeliveryService {
+public class AuthService {
 
-    private static final String DELIVERY_SERVICE_URL = "http://localhost:3000/delivery/";
+    private static final String AUTH_SERVICE_URL = "http://localhost:3000/auth/authenticate";
     private final WebClient webClient;
 
-    public DeliveryService() {
+    public AuthService() {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
                 .maxConnections(2000)
@@ -31,12 +32,22 @@ public class DeliveryService {
                 .build();
     }
 
-    public Mono<Delivery> fetchDelivery(long id, String token) {
+    public Mono<String> fetchToken(String username, String password) {
         return this.webClient
-                .get()
-                .uri(DELIVERY_SERVICE_URL + id)
-                .header("Authorization", "Authorization: Bearer " + token)
+                .post()
+                .uri(AUTH_SERVICE_URL)
+                .bodyValue(new AuthenticateRequest(username, password))
                 .retrieve()
-                .bodyToMono(Delivery.class);
+                .bodyToMono(AuthenticateResponse.class)
+                .map(authenticateResponse -> authenticateResponse.token);
     }
+
+    private record AuthenticateRequest(String username, String password) {
+
+    }
+
+    private record AuthenticateResponse(String token) {
+
+    }
+
 }
