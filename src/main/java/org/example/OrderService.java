@@ -19,6 +19,10 @@ public class OrderService {
     }
 
 
+    public Mono<OrderDetails> fetchOrderDetails(long orderId, ApiCredentials apiCredentials) {
+        return fetchOrderDetails(orderId, apiCredentials.username(), apiCredentials.password());
+    }
+
     public Mono<OrderDetails> fetchOrderDetails(long orderId, String username, String password) {
         final Mono<String> tokenMono = authService.fetchToken(username, password);
 
@@ -29,5 +33,4 @@ public class OrderService {
             return Mono.zip(deliveryMono, billInfoMono, (delivery, billInfo) -> new OrderDetails(orderId, delivery, billInfo));
         });
     }
-
 }
