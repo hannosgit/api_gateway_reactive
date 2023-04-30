@@ -14,10 +14,11 @@ import java.time.Duration;
 @Service
 public class AuthService {
 
-    private static final String AUTH_SERVICE_URL = "http://localhost:3000/auth/authenticate";
     private final WebClient webClient;
 
-    public AuthService() {
+    private final String uri;
+
+    public AuthService(ServiceAddressConfigProperty serviceAddressConfigProperty) {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
                 .maxConnections(2000)
@@ -31,12 +32,13 @@ public class AuthService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+        this.uri = "http://" + serviceAddressConfigProperty.address() + "/auth/authenticate";
     }
 
     public Mono<String> fetchToken(String username, String password) {
         return this.webClient
                 .post()
-                .uri(AUTH_SERVICE_URL)
+                .uri(this.uri)
                 .bodyValue(new AuthenticateRequest(username, password))
                 .retrieve()
                 .bodyToMono(AuthenticateResponse.class)

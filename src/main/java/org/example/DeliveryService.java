@@ -14,10 +14,11 @@ import java.time.Duration;
 @Service
 public class DeliveryService {
 
-    private static final String DELIVERY_SERVICE_URL = "http://localhost:3000/delivery/";
     private final WebClient webClient;
 
-    public DeliveryService() {
+    private final String uri;
+
+    public DeliveryService(ServiceAddressConfigProperty serviceAddressConfigProperty) {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
                 .maxConnections(2000)
@@ -31,12 +32,13 @@ public class DeliveryService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+        this.uri = "http://" + serviceAddressConfigProperty.address() + "/delivery/";
     }
 
     public Mono<Delivery> fetchDelivery(long id, String token) {
         return this.webClient
                 .get()
-                .uri(DELIVERY_SERVICE_URL + id)
+                .uri(this.uri + id)
                 .header("Authorization", "Authorization: Bearer " + token)
                 .retrieve()
                 .bodyToMono(Delivery.class)

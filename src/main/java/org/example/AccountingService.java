@@ -15,10 +15,11 @@ import java.time.Duration;
 @Service
 public class AccountingService {
 
-    private static final String ACCOUNT_SERVICE_URL = "http://localhost:3000/bill/";
     private final WebClient webClient;
 
-    public AccountingService() {
+    private final String uri;
+
+    public AccountingService(ServiceAddressConfigProperty serviceAddressConfigProperty) {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
                 .maxConnections(2000)
@@ -32,12 +33,13 @@ public class AccountingService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+        this.uri = "http://" + serviceAddressConfigProperty.address() + "/bill/";
     }
 
     public Mono<BillInfo> fetchBillInfoForOrder(long orderId, String token) {
         return this.webClient
                 .get()
-                .uri(ACCOUNT_SERVICE_URL + orderId)
+                .uri(this.uri + orderId)
                 .header("Authorization", "Authorization: Bearer " + token)
                 .retrieve()
                 .bodyToMono(BillInfo.class)
