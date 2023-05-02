@@ -33,7 +33,7 @@ public class AuthService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-        this.uri = "http://" + serviceAddressConfigProperty.address() + "/auth/authenticate";
+        this.uri = "http://" + serviceAddressConfigProperty.auth() + "/auth/authenticate";
     }
 
     public Mono<String> fetchToken(String username, String password) {

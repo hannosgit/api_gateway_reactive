@@ -33,7 +33,7 @@ public class DeliveryService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-        this.uri = "http://" + serviceAddressConfigProperty.address() + "/delivery/";
+        this.uri = "http://" + serviceAddressConfigProperty.delivery() + "/delivery/";
     }
 
     public Mono<Delivery> fetchDelivery(long id, String token) {

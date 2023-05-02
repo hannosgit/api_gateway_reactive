@@ -34,7 +34,7 @@ public class AccountingService {
                 .builder()
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
-        this.uri = "http://" + serviceAddressConfigProperty.address() + "/bill/";
+        this.uri = "http://" + serviceAddressConfigProperty.bill() + "/bill/";
     }
 
     public Mono<BillInfo> fetchBillInfoForOrder(long orderId, String token) {
