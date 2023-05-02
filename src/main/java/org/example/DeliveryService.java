@@ -21,11 +21,11 @@ public class DeliveryService {
     public DeliveryService(ServiceAddressConfigProperty serviceAddressConfigProperty) {
         ConnectionProvider connProvider = ConnectionProvider
                 .builder("webclient-conn-pool")
-                .maxConnections(2000)
+                .maxConnections(10_000)
                 .maxIdleTime(Duration.ofMillis(10_000))
                 .maxLifeTime(Duration.ofMillis(10_000))
-                .pendingAcquireMaxCount(1_000)
-                .pendingAcquireTimeout(Duration.ofMillis(1_000))
+                .pendingAcquireMaxCount(10_000)
+                .pendingAcquireTimeout(Duration.ofMillis(10_000))
                 .build();
         HttpClient httpClient = HttpClient.create(connProvider);
         this.webClient = WebClient
