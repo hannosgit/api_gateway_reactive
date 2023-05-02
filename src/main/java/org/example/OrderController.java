@@ -17,12 +17,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-//    @ExceptionHandler(FetchException.class)
-//    @ResponseStatus(HttpStatus.BAD_GATEWAY)
-//    public ErrorResponse fetchException(FetchException fetchException) {
-//        return new ErrorResponse(fetchException.getMessage());
-//    }
-
     @GetMapping("/{orderId}")
     public Mono<OrderDetails> getOrderById(@PathVariable long orderId, @RequestHeader("Authorization") String authorization) {
         final ApiCredentials apiCredentials = headerService.parseAuthorizationHeader(authorization);
