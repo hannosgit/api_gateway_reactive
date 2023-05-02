@@ -1,7 +1,8 @@
 package org.example;
 
 
-import org.example.data.BillInfo;
+import org.example.common.BillInfo;
+import org.example.common.ServiceAddressConfigProperty;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

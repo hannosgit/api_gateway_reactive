@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.data.ApiCredentials;
-import org.example.data.BillInfo;
-import org.example.data.Delivery;
-import org.example.data.OrderDetails;
+import org.example.common.ApiCredentials;
+import org.example.common.BillInfo;
+import org.example.common.Delivery;
+import org.example.common.OrderDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
