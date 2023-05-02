@@ -27,7 +27,7 @@ public class OrderService {
         return fetchOrderDetails(orderId, apiCredentials.username(), apiCredentials.password());
     }
 
-    public Mono<OrderDetails> fetchOrderDetails(long orderId, String username, String password) {
+    private Mono<OrderDetails> fetchOrderDetails(long orderId, String username, String password) {
         final Mono<String> tokenMono = authService.fetchToken(username, password);
 
         return tokenMono.flatMap(token -> {
