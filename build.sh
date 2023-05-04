@@ -1,1 +1,1 @@
-docker build -t hannes/reactive-api-gw:v1 .
+docker build -t hannes/api-gw-reactive:v1 .
