@@ -6,4 +6,4 @@ EXPOSE 8080
 
 WORKDIR /app
 
-ENTRYPOINT ["java", "--enable-preview", "--add-modules", "jdk.incubator.concurrent", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx32g",  "--enable-preview", "--add-modules", "jdk.incubator.concurrent", "-jar", "app.jar"]
