@@ -1,7 +1,7 @@
 # Source Code for the Reactive Implementation of the API Gateway
 
 This repository contains the source code for the reactive implementation of the API gateway.
-The service expose a single endpoint: `http://localhost:8080/order/:orderId` that returns the aggregated details of an
+The service exposes a single endpoint: `http://localhost:8080/order/:orderId` that returns the aggregated details of an
 order.
 
 ## Build Project
