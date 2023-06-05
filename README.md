@@ -6,7 +6,7 @@ order.
 
 ## Build Project
 
-Maven is the chose build tool for this project.
+Maven is the chosen build tool for this project.
 
 The project can be built with following command:
 ```
